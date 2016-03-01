@@ -47,6 +47,9 @@ def do_complete(backend, login, user=None, redirect_name='next',
     redirect_value = backend.strategy.session_get(redirect_name, '') or \
                      data.get(redirect_name, '')
 
+    # also pop new association flag
+    new_association = backend.strategy.session_get('new_association', '')
+
     user_model = backend.strategy.storage.user.user_model()
     if user and not isinstance(user, user_model):
         return user
@@ -72,6 +75,10 @@ def do_complete(backend, login, user=None, redirect_name='next',
                 url = setting_url(backend,
                                   'NEW_USER_REDIRECT_URL',
                                   redirect_value,
+                                  'LOGIN_REDIRECT_URL')
+            elif new_association:
+                url = setting_url(backend, redirect_value,
+                                  'NEW_ASSOCIATION_REDIRECT_URL',
                                   'LOGIN_REDIRECT_URL')
             else:
                 url = setting_url(backend, redirect_value,

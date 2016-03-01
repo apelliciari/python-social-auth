@@ -113,6 +113,8 @@ class BaseAuth(object):
             if not isinstance(result, dict):
                 return result
             out.update(result)
+        # set the flag new association on session to pop it from do_complete action
+        self.strategy.session_set('new_association', out.get('new_association', False))
         self.strategy.clean_partial_pipeline()
         return out
 
